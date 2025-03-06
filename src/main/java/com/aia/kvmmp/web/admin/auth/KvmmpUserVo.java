@@ -1,10 +1,7 @@
 package com.aia.kvmmp.web.admin.auth;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.access.annotation.Secured;
-
 
 import java.io.Serializable;
 import java.util.List;

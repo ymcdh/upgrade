@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+        <beans>
+            <bean id="config" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+                <property name="locations">
+                    <list>
+                         <value>file:D:/workspace/KVMMP/src/main/webapp/WEB-INF/conf/properties/kvmmp.local.properties</value>
+                    </list>
+                </property>
+            </bean>
+            <bean id="oraclePoolDsXSVCVMM" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close"  primary="true">
+                <property name="driverClassName" value="#{config['kvmmp.jdbc.driver']}" />
+                <property name="url" value="#{config['kvmmp.jdbc.url']}" />
+                <property name="username" value="#{config['kvmmp.jdbc.user']}" />
+                <property name="password" value="#{config['kvmmp.jdbc.password']}" />
+
+                <property name="initialSize" value="#{config['kvmmp.jdbc.initialSize']}" />
+                <property name="maxTotal" value="#{config['kvmmp.jdbc.maxTotal']}" />
+                <property name="maxIdle" value="#{config['kvmmp.jdbc.maxIdle']}" />
+                <property name="minIdle" value="#{config['kvmmp.jdbc.minIdle']}" />
+
+                <property name="validationQuery" value="select 1 from dual" />
+
+                <property name="defaultQueryTimeout" value="#{config['kvmmp.jdbc.defaultQueryTimeout']}" />
+                <property name="connectionProperties" value="oracle.jdbc.ReadTimeout=#{config['oracle.jdbc.ReadTimeout']}" />
+                <property name="connectionInitSqls">
+                    <list>
+                        <value>call dbms_applicaion_info.set_module('KVMMP Local JDBC Client', 'online')</value>
+                    </list>
+                </property>
+            </bean>
+            <bean id="dataSourceXSVCVMM" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+                <constructor-arg ref="oraclePoolDsXSVCVMM" />
+                <property name="logFormatter">
+                    <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter">
+                        <property name="loggingType" value="MULTI_LINE" />
+                    </bean>
+                </property>
+            </bean>
+            <bean id="txManagerXSVCVMM" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+                <property name="dataSource" ref="dataSourceXSVCVMM"/>
+            </bean>
+            <tx:annotation-driven transaction-manager="txManagerXSVCVMM" />
+        </beans>
+</beans>

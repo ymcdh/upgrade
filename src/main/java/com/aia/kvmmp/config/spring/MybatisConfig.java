@@ -21,8 +21,10 @@ public class MybatisConfig {
         sessionFactoryBean.setDataSource(dataSourceSXVCVMM);
 
         // mybatis-config.xml 설정 파일 추가
+        String configPath = System.getProperty("KVMMP_CONF_PATH") + "/mybatis/mybatis-config.xml";
+
         sessionFactoryBean.setConfigLocation(new PathMatchingResourcePatternResolver()
-                .getResource("file:${KVMMP_CONF_PATH}/mybatis/mybatis-config.xml"));
+                .getResource("file:" + configPath.replace("\\", "/")));
 
         // Mapper 파일 경로 설정
         Resource[] mapperLocations = new PathMatchingResourcePatternResolver()
@@ -40,8 +42,10 @@ public class MybatisConfig {
         sessionFactoryBean.setDataSource(dataSourceSXVCVMM_BATCH);
 
         // mybatis-config.xml 설정 파일 추가
+        String configPath = System.getProperty("KVMMP_CONF_PATH") + "/mybatis/mybatis-config.xml";
+
         sessionFactoryBean.setConfigLocation(new PathMatchingResourcePatternResolver()
-                .getResource("file:${KVMMP_CONF_PATH}/mybatis/mybatis-config.xml"));
+                .getResource("file:" + configPath.replace("\\", "/")));
 
         // Mapper 파일 경로 설정
         Resource[] mapperLocations = new PathMatchingResourcePatternResolver()
@@ -59,8 +63,10 @@ public class MybatisConfig {
         sessionFactoryBean.setDataSource(dataSourceSXVCVMM_BATCH_SEPT);
 
         // mybatis-config.xml 설정 파일 추가
+        String configPath = System.getProperty("KVMMP_CONF_PATH") + "/mybatis/mybatis-config.xml";
+
         sessionFactoryBean.setConfigLocation(new PathMatchingResourcePatternResolver()
-                .getResource("file:${KVMMP_CONF_PATH}/mybatis/mybatis-config.xml"));
+                .getResource("file:" + configPath.replace("\\", "/")));
 
         // Mapper 파일 경로 설정
         Resource[] mapperLocations = new PathMatchingResourcePatternResolver()
