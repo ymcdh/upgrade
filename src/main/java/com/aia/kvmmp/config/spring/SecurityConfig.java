@@ -1,6 +1,7 @@
 package com.aia.kvmmp.config.spring;
 
 import com.aia.kvmmp.web.admin.auth.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @ComponentScan(basePackages = "com.aia.kvmmp.web.admin.auth")
@@ -52,6 +55,13 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler()));
 
         return http.build();
+
+//        http.authorizeHttpRequests(auth -> auth
+//                .requestMatchers("/admin/**").permitAll()  // 로그인 관련 경로 허용
+//                .anyRequest().authenticated()
+//        );
+
+ //       return http.build();
     }
 
     @Bean
@@ -72,5 +82,10 @@ public class SecurityConfig {
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
         return new CustomAccessDeniedHandler();
+    }
+
+    @Bean
+    public HandlerMappingIntrospector mvcHandlerMappingIntrospector() {
+        return new HandlerMappingIntrospector();
     }
 }
